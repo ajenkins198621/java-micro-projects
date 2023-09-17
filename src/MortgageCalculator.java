@@ -6,14 +6,19 @@ public class MortgageCalculator {
         int principal = getPrincipal();
         float interestRate = getInterestRate();
         byte period = getPeriod();
-        getMonthlyPayment(principal, interestRate, period);
+        double mortgage = getMonthlyPayment(principal, interestRate, period);
+        printMonthlyPayment(mortgage);
         Main.selectProgram();
     }
 
-    public static int getPrincipal() {
+    public static Scanner askQuestion(String question) {
         Scanner userInput = new Scanner(System.in);
+        System.out.print(question);
+        return userInput;
+    }
 
-        System.out.print("Your Principal ($1k - $1M): ");
+    public static int getPrincipal() {
+        Scanner userInput = askQuestion("Your Principal ($1k - $1M): ");
 
         int principal = userInput.nextInt();
 
@@ -26,9 +31,7 @@ public class MortgageCalculator {
     }
 
     public static float getInterestRate() {
-        Scanner userInput = new Scanner(System.in);
-
-        System.out.print("Annual Interest Rate (0% < Int < 30%): ");
+        Scanner userInput = askQuestion("Annual Interest Rate (0% < Int < 30%): ");
 
         float interestRate = userInput.nextFloat();
 
@@ -41,9 +44,7 @@ public class MortgageCalculator {
     }
 
     public static byte getPeriod() {
-        Scanner userInput = new Scanner(System.in);
-
-        System.out.print("Number of years (1 - 30): ");
+        Scanner userInput = askQuestion("Number of years (1 - 30): ");
 
         byte period = userInput.nextByte();
 
@@ -54,7 +55,7 @@ public class MortgageCalculator {
         return period;
     }
 
-    public static void getMonthlyPayment(int principal, float interestRate, byte period) {
+    public static double getMonthlyPayment(int principal, float interestRate, byte period) {
         final byte MONTHS_IN_YEAR = 12;
         final byte PERCENT = 100;
 
@@ -62,13 +63,16 @@ public class MortgageCalculator {
 
         int numberOfPayments = period * MONTHS_IN_YEAR;
 
-        double mortgage = principal * (monthlyInterest * Math.pow(1 +  monthlyInterest, numberOfPayments))
+        return principal * (monthlyInterest * Math.pow(1 +  monthlyInterest, numberOfPayments))
                 / (Math.pow(1 + monthlyInterest,  numberOfPayments) - 1);
+    }
+
+    public static void printMonthlyPayment(double mortgage) {
         String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
         System.out.println();
         System.out.println("--------------------------------------------");
         System.out.println("--------------------------------------------");
-        System.out.println("---> Your monthly cost is: " + mortgageFormatted);
+        System.out.println("---> Your monthly fee is: " + mortgageFormatted + " <---");
         System.out.println("--------------------------------------------");
         System.out.println("--------------------------------------------");
         System.out.println();
